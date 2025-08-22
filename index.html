@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Gruppas AI</title>
+  <style>
+    body { background:#1e1e2f; color:white; font-family:Arial; text-align:center; }
+    textarea { width:80%; height:100px; margin:20px; border-radius:10px; padding:10px; }
+    button { padding:15px 30px; background:#6a00ff; color:white; border:none; border-radius:10px; cursor:pointer; }
+    #response { margin-top:20px; padding:20px; background:#2e2e3f; border-radius:10px; }
+  </style>
+</head>
+<body>
+  <h1>🤖 Gruppas AI</h1>
+  <p>Напиши, что нужно сгенерировать:</p>
+  <textarea id="prompt"></textarea><br>
+  <button onclick="send()">Отправить</button>
+  <div id="response"></div>
+
+  <script>
+    async function send() {
+      const prompt = document.getElementById("prompt").value;
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ТВОЙ_API_KEY"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{role:"user", content:prompt}]
+        })
+      });
+      const data = await res.json();
+      document.getElementById("response").innerText = data.choices[0].message.content;
+    }
+  </script>
+</body>
+</html>
